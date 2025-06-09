@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import { 
-  collection, 
-  getDocs, 
-  deleteDoc, 
-  doc, 
-  query, 
-  where 
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  where
 } from 'firebase/firestore';
 import { db } from '../../services/credenciaisFirebase';
 import styles from '../styles/styles';
@@ -31,11 +31,11 @@ const Projects = () => {
     setLoading(true);
     try {
       let q;
-      
+
       // Admin e Avaliador: buscam todos os projetos
-      if (tipo === 'admin' || tipo === 'avaliador') {
+      if (tipo === 'administrador' || tipo === 'avaliador') {
         q = query(collection(db, 'projetos'));
-      } 
+      }
       // Usuário normal: busca apenas projetos do usuário
       else if (userId) {
         q = query(
@@ -61,18 +61,19 @@ const Projects = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    // Só busca projetos quando o tipo de usuário estiver carregado
-    if (!loadingTipo) {
-      fetchProjetos();
-    }
-  }, [loadingTipo, userId, tipo]);
+useEffect(() => {
+  if (!loadingTipo) {
+    console.log('Tipo de usuário:', tipo); // 👈 mostra no console
+    fetchProjetos();
+  }
+}, [loadingTipo, userId, tipo]);
+
 
   const handleViewDetails = (item) => {
-    navigation.navigate('Detalhes do Projeto', { 
+    navigation.navigate('Detalhes do Projeto', {
       projeto: item,
       // Passa a informação se o usuário pode editar
-      podeEditar: tipo === 'admin' || (tipo === 'normal' && item.criadoPor === userId)
+      podeEditar: tipo === 'administrador' || (tipo === 'aluno' && item.criadoPor === userId)
     });
   };
 
@@ -93,13 +94,22 @@ const Projects = () => {
       <Text>Período: {item.periodo}</Text>
 
       <View style={localStyles.actions}>
-        <TouchableOpacity 
-          onPress={() => handleViewDetails(item)} 
+        <TouchableOpacity
+          onPress={() => handleViewDetails(item)}
           style={localStyles.iconButton}
         >
           <Icon name="visibility" size={24} color="#546A83" />
         </TouchableOpacity>
 
+        {/* Mostra botão de deletar apenas para admin ou dono do projeto (não mostra para avaliador) */}
+        {tipo !== 'avaliador' && (tipo === 'administrador' || item.criadoPor === userId) && (
+          <TouchableOpacity
+            onPress={() => handleDelete(item.id)}
+            style={localStyles.iconButton}
+          >
+            <Icon name="delete" size={24} color="#FF6347" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -123,7 +133,7 @@ const Projects = () => {
           !loading && (
             <View style={localStyles.emptyContainer}>
               <Text style={localStyles.emptyText}>
-                {tipo === 'normal' 
+                {tipo === 'aluno'
                   ? 'Você ainda não criou projetos'
                   : 'Nenhum projeto encontrado'}
               </Text>
@@ -132,14 +142,22 @@ const Projects = () => {
         }
       />
 
-      if (tipo === 'normal') {
+      {/* {(tipo === 'administrador' || tipo === 'aluno') && (
         <TouchableOpacity
           style={localStyles.fab}
           onPress={() => navigation.navigate('Formulário de Projeto')}
         >
           <Icon name="add" size={30} color="#fff" />
-      </TouchableOpacity>
-      }
+        </TouchableOpacity>
+      )} */}
+
+       <TouchableOpacity
+          style={localStyles.fab}
+          onPress={() => navigation.navigate('Formulário de Projeto')}
+        >
+          <Icon name="add" size={30} color="#fff" />
+        </TouchableOpacity>
+
     </View>
   );
 };

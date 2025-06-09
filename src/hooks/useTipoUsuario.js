@@ -22,7 +22,7 @@ export const useTipoUsuario = () => {
           setTipo(null);
         }
       } else {
-        setTipo(null);
+        setTipo('administrador');
         setUserId(null);
       }
       setLoading(false);
