@@ -99,16 +99,7 @@ const Projects = () => {
         >
           <Icon name="visibility" size={24} color="#546A83" />
         </TouchableOpacity>
-        
-        {/* Mostra botão de deletar apenas para admin ou dono do projeto (não mostra para avaliador) */}
-        {tipo !== 'avaliador' && (tipo === 'admin' || item.criadoPor === userId) && (
-          <TouchableOpacity 
-            onPress={() => handleDelete(item.id)} 
-            style={localStyles.iconButton}
-          >
-            <Icon name="delete" size={24} color="#FF6347" />
-          </TouchableOpacity>
-        )}
+
       </View>
     </View>
   );
@@ -141,15 +132,14 @@ const Projects = () => {
         }
       />
 
-      {/* Mostrar botão de adicionar apenas para admin */}
-      {tipo === 'admin' && (
+      if (tipo === 'normal') {
         <TouchableOpacity
           style={localStyles.fab}
           onPress={() => navigation.navigate('Formulário de Projeto')}
         >
           <Icon name="add" size={30} color="#fff" />
-        </TouchableOpacity>
-      )}
+      </TouchableOpacity>
+      }
     </View>
   );
 };
