@@ -20,13 +20,13 @@ export default function CustomDrawer(props) {
                     const docRef = doc(db, 'usuarios', user.uid); 
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                        setUserName(user.nomee);
+                        setUserName(user.nome);
                     } else {
                         setUserName(user.email); 
                     }
                 } catch (error) {
                     console.error('Erro ao buscar nome do usuário:', error);
-                    setUserName(user.email); 
+                    setUserName(user.nome); 
                 }
             }
         };

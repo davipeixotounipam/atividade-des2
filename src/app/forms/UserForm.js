@@ -16,6 +16,9 @@ import { useNavigation } from '@react-navigation/native';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../services/credenciaisFirebase';
 import styles from '../styles/styles';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import auth from '../../services/credenciaisFirebaseAuth';
+
 
 const UserForm = () => {
   const navigation = useNavigation();
@@ -32,6 +35,12 @@ const UserForm = () => {
     }
 
     try {
+      
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        senha
+      );
       await addDoc(collection(db, 'usuarios'), {
         nome,
         email,
@@ -77,7 +86,7 @@ const UserForm = () => {
             <Text style={styles.label}>Tipo</Text>
             <View style={[styles.input, { padding: 0 }]}>
               <Picker
-                selectedValue={tipo}
+                selectedValue={"administrador"}
                 onValueChange={(itemValue) => setTipo(itemValue)}
               >
                 <Picker.Item label="Administrador" value="administrador" />

@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../app/screens/Login';
 import DrawerNavigator from './DrawerNavigator';
 import ProjectDetails from '../app/screens/ProjectDetails'; // <-- importar a tela
+import UserForm from '../app/forms/UserForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,8 @@ export default function MainStack() {
       <Stack.Screen name="HomeDrawer">
         {(props) => <DrawerNavigator {...props} />}
       </Stack.Screen>
+      
+      <Stack.Screen name="Registro" component={UserForm}/>
       
       {/* Tela de detalhes do projeto */}
       <Stack.Screen

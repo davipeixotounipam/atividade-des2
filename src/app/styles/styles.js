@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginVertical: 10,
     },
+    texto:{
+        color: '##0000',
+        fontWeight: 'bold'
+    },
 });
 
 
